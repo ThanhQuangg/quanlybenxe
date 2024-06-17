@@ -1,6 +1,4 @@
-
 package com.ntq.controllers;
-
 
 import com.ntq.services.BusService;
 import com.ntq.services.CategoryService;
@@ -21,29 +19,27 @@ import com.ntq.services.RouteService;
 @Controller
 @ControllerAdvice
 public class HomeController {
+
     @Autowired
     private CategoryService cateService;
     @Autowired
     private BusService busService;
     @Autowired
     private RouteService routeService;
-    
+
     @ModelAttribute
-    public void commonAttr(Model model) {
+    public void commonAttr(Model model, @RequestParam Map<String, String> params) {
         model.addAttribute("categories", this.cateService.getCates());
-        model.addAttribute("routes", this.routeService.getRoutes());
+        model.addAttribute("buses", this.busService.getBuses(params));
+        model.addAttribute("routes", this.routeService.getRoutes(params));
     }
-    
-    
-    
-    
+
     @RequestMapping("/")
     public String index(Model model,
             @RequestParam Map<String, String> params) {
-        
+
         model.addAttribute("buses", this.busService.getBuses(params));
         return "index";
     }
-    
 
 }

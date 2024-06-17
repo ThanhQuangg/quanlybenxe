@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.ntq.configs;
 
 import com.cloudinary.Cloudinary;
@@ -24,21 +20,25 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @ComponentScan(basePackages = {
     "com.ntq.controllers",
     "com.ntq.repositories",
-    "com.ntq.services"
+    "com.ntq.services",
+    "com.ntq.components",
+    "com.ntq.filters"
 })
 public class WebAppContextConfig implements WebMvcConfigurer {
 
+    //Kích hoạt xử lý servlet mặc định
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
 
-//  them js
+    //Cấu hình các handler tài nguyên tĩnh (JS)
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/js/**").addResourceLocations("/resources/js/");
     }
 
+    //Cấu hình multipart resolver cho upload file
     @Bean
     public CommonsMultipartResolver multipartResolver() {
         CommonsMultipartResolver resolver
@@ -47,6 +47,7 @@ public class WebAppContextConfig implements WebMvcConfigurer {
         return resolver;
     }
 
+    //Đăng ký formatter CategoryFormatter
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addFormatter(new CategoryFormatter());
@@ -55,12 +56,11 @@ public class WebAppContextConfig implements WebMvcConfigurer {
 
     @Bean
     public Cloudinary cloudinary() {
-        Cloudinary cloudinary
-                = new Cloudinary(ObjectUtils.asMap(
-                        "cloud_name", "dnqxawhjq",
-                        "api_key", "747232433638318",
-                        "api_secret", "uyixwZrKZNwZqiGHdnR1RmMcJcw",
-                        "secure", true));
+        Cloudinary cloudinary = new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", System.getenv("CLOUDINARY_CLOUD_NAME"),
+                "api_key", System.getenv("CLOUDINARY_API_KEY"),
+                "api_secret", System.getenv("CLOUDINARY_API_SECRET"),
+                "secure", true));
         return cloudinary;
     }
 }

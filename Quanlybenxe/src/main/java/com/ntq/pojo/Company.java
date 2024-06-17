@@ -1,9 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.ntq.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -16,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -26,10 +25,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- *
- * @author ACER
- */
 @Entity
 @Table(name = "company")
 @XmlRootElement
@@ -76,17 +71,19 @@ public class Company implements Serializable {
     @Column(name = "IsShippingAvailable")
     private Boolean isShippingAvailable;
     @Column(name = "IsActive")
-    private Boolean isActive = false ;
+    private Boolean isActive = false;
     @Column(name = "created_at")
-    
+
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
     @OneToMany(mappedBy = "companyID")
+    @JsonIgnore
     private Set<Bus> busSet;
     @OneToMany(mappedBy = "companyID")
+    @JsonIgnore
     private Set<Comment> commentSet;
     @Transient
     private MultipartFile file;
@@ -202,6 +199,17 @@ public class Company implements Serializable {
         this.commentSet = commentSet;
     }
 
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = new Date();
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -240,5 +248,5 @@ public class Company implements Serializable {
     public void setFile(MultipartFile file) {
         this.file = file;
     }
-    
+
 }

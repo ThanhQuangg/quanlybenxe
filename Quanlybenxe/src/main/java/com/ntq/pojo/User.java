@@ -1,13 +1,11 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.ntq.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,10 +17,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -36,12 +36,14 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "User.findByUserID", query = "SELECT u FROM User u WHERE u.userID = :userID"),
     @NamedQuery(name = "User.findByUsername", query = "SELECT u FROM User u WHERE u.username = :username"),
     @NamedQuery(name = "User.findByPassword", query = "SELECT u FROM User u WHERE u.password = :password"),
-    @NamedQuery(name = "User.findByRole", query = "SELECT u FROM User u WHERE u.role = :role"),
+    @NamedQuery(name = "User.findByUserRole", query = "SELECT u FROM User u WHERE u.userRole = :userRole"),
     @NamedQuery(name = "User.findByAvatar", query = "SELECT u FROM User u WHERE u.avatar = :avatar"),
     @NamedQuery(name = "User.findByEmail", query = "SELECT u FROM User u WHERE u.email = :email"),
     @NamedQuery(name = "User.findByPhoneNumber", query = "SELECT u FROM User u WHERE u.phoneNumber = :phoneNumber"),
     @NamedQuery(name = "User.findByCreatedAt", query = "SELECT u FROM User u WHERE u.createdAt = :createdAt"),
-    @NamedQuery(name = "User.findByUpdatedAt", query = "SELECT u FROM User u WHERE u.updatedAt = :updatedAt")})
+    @NamedQuery(name = "User.findByUpdatedAt", query = "SELECT u FROM User u WHERE u.updatedAt = :updatedAt"),
+    @NamedQuery(name = "User.findByFirstName", query = "SELECT u FROM User u WHERE u.firstName = :firstName"),
+    @NamedQuery(name = "User.findByLastName", query = "SELECT u FROM User u WHERE u.lastName = :lastName")})
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -50,21 +52,15 @@ public class User implements Serializable {
     @Basic(optional = false)
     @Column(name = "UserID")
     private Integer userID;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 50)
-    @Column(name = "Username")
+    @Size(max = 255)
+    @Column(name = "username")
     private String username;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 255)
-    @Column(name = "Password")
+    @Size(max = 255)
+    @Column(name = "password")
     private String password;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 16)
-    @Column(name = "Role")
-    private String role;
+    @Size(max = 20)
+    @Column(name = "user_role")
+    private String userRole;
     @Size(max = 255)
     @Column(name = "Avatar")
     private String avatar;
@@ -83,11 +79,17 @@ public class User implements Serializable {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
-    @OneToMany(mappedBy = "userID")
-    private Set<Booking> bookingSet;
-    @OneToMany(mappedBy = "userID")
-    private Set<Comment> commentSet;
-
+    @Size(max = 50)
+    @Column(name = "first_name")
+    private String firstName;
+    @Size(max = 50)
+    @Column(name = "last_name")
+    private String lastName;
+    @Transient
+    private MultipartFile file;
+    @OneToMany(mappedBy = "userId", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private Set<Orders> orderSet;
     public User() {
     }
 
@@ -95,11 +97,8 @@ public class User implements Serializable {
         this.userID = userID;
     }
 
-    public User(Integer userID, String username, String password, String role, String email) {
+    public User(Integer userID, String email) {
         this.userID = userID;
-        this.username = username;
-        this.password = password;
-        this.role = role;
         this.email = email;
     }
 
@@ -127,12 +126,12 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public String getRole() {
-        return role;
+    public String getUserRole() {
+        return userRole;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setUserRole(String userRole) {
+        this.userRole = userRole;
     }
 
     public String getAvatar() {
@@ -175,22 +174,29 @@ public class User implements Serializable {
         this.updatedAt = updatedAt;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
     @XmlTransient
-    public Set<Booking> getBookingSet() {
-        return bookingSet;
-    }
-
-    public void setBookingSet(Set<Booking> bookingSet) {
-        this.bookingSet = bookingSet;
+    public Set<Orders> getOrderSet() {
+        return orderSet;
     }
 
     @XmlTransient
-    public Set<Comment> getCommentSet() {
-        return commentSet;
-    }
-
-    public void setCommentSet(Set<Comment> commentSet) {
-        this.commentSet = commentSet;
+    public void setOrderSet(Set<Orders> orderSet) {
+        this.orderSet = orderSet;
     }
 
     @Override
@@ -217,5 +223,17 @@ public class User implements Serializable {
     public String toString() {
         return "com.ntq.pojo.User[ userID=" + userID + " ]";
     }
+
+    
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    
+    public void setFile(MultipartFile file) {
+        this.file = file;
+    }
+
+    
     
 }

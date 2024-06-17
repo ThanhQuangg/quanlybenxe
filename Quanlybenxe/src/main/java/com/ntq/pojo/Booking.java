@@ -18,6 +18,8 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -216,6 +218,17 @@ public class Booking implements Serializable {
         this.userID = userID;
     }
 
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = new Date();
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -240,5 +253,5 @@ public class Booking implements Serializable {
     public String toString() {
         return "com.ntq.pojo.Booking[ bookingID=" + bookingID + " ]";
     }
-    
+
 }

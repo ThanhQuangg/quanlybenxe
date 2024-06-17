@@ -2,6 +2,8 @@ package com.ntq.controllers;
 
 import com.ntq.pojo.Bus;
 import com.ntq.services.BusService;
+import java.util.List;
+import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,7 +26,16 @@ public class BusesController {
         model.addAttribute("bus", new Bus());
         return "buses";
     }
-
+//    @GetMapping
+//    public String listBuses(Model model, Map<String, String> params) {
+//        model.addAttribute("buses", busService.getBuses(params));
+//        return "buses/list";
+//    }
+//    @GetMapping("/buses")
+//    public List<Bus> getBuses(Map<String, String> params) {
+//        return busService.getBuses(params);
+//    }
+    
     @PostMapping("/buses")
     public String createBus(@ModelAttribute(value = "bus") @Valid Bus b,
             BindingResult rs) {

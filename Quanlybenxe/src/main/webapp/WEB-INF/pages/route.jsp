@@ -6,9 +6,12 @@
 <c:url value="/routes" var="action" />
 <form:form method="post" action="${action}" modelAttribute="route" enctype="multipart/form-data">
     <form:errors path="*" element="div" cssClass="alert alert-danger" />
-
     <div class="form-floating mb-3 mt-3">
-        <form:input class="form-control" id="startLocation" placeholder="Biển số xe khách" path="startLocation" />
+        <form:input class="form-control" id="name" placeholder="Tên tuyến xe" path="name" />
+        <label for="name">Tên tuyến xe</label>
+    </div> 
+    <div class="form-floating mb-3 mt-3">
+        <form:input class="form-control" id="startLocation" placeholder="Điểm bắt đầu" path="startLocation" />
         <label for="startLocation">Điểm bắt đầu</label>
     </div>
     <div class="form-floating mb-3 mt-3">

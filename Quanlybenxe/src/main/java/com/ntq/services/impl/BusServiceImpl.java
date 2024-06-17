@@ -1,6 +1,4 @@
-
 package com.ntq.services.impl;
-
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
@@ -53,6 +51,11 @@ public class BusServiceImpl implements BusService {
     @Override
     public void deleteBus(int busID) {
         this.busRepository.deleteBus(busID);
+    }
+
+    @Override
+    public List<Bus> getBusesByCompany(int companyID) {
+        return busRepository.findByCompanyId(companyID);
     }
 
 }

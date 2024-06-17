@@ -36,9 +36,10 @@ public class RouteServicesImpl implements RouteService {
         this.routeRepository.deleteRoute(routeID);
     }
 
-    @Override
-    public List<Route> getRoutes() {
-        return this.routeRepository.getRoutes();
-    }
+//    @Override
+//    public List<Route> getRoutes() {
+//        return this.routeRepository.getRoutes();
+//    }
 
+    
 }

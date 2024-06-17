@@ -4,6 +4,7 @@
  */
 package com.ntq.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalTime;
@@ -19,6 +20,8 @@ import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -68,11 +71,9 @@ public class Route implements Serializable {
     private BigDecimal distance;
     @Basic(optional = false)
     @NotNull
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "estimated_duration")
-//    @Temporal(TemporalType.TIME)
-//    private Date estimatedDuration;
-    private LocalTime estimatedDuration;
-    
+    private Date estimatedDuration;
     @Lob
     @Size(max = 65535)
     @Column(name = "description")
@@ -83,7 +84,10 @@ public class Route implements Serializable {
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+    @Column(name = "name")
+    private String name;
     @OneToMany(mappedBy = "routeID")
+    @JsonIgnore
     private Set<Trip> tripSet;
 
     public Route() {
@@ -93,8 +97,9 @@ public class Route implements Serializable {
         this.routeID = routeID;
     }
 
-    public Route(Integer routeID, String startLocation, String endLocation, BigDecimal distance, LocalTime estimatedDuration) {
+    public Route(Integer routeID, String name, String startLocation, String endLocation, BigDecimal distance, Date estimatedDuration) {
         this.routeID = routeID;
+        this.name = name;
         this.startLocation = startLocation;
         this.endLocation = endLocation;
         this.distance = distance;
@@ -107,6 +112,14 @@ public class Route implements Serializable {
 
     public void setRouteID(Integer routeID) {
         this.routeID = routeID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getStartLocation() {
@@ -133,11 +146,19 @@ public class Route implements Serializable {
         this.distance = distance;
     }
 
-    public LocalTime getEstimatedDuration() {
+//    public Date getEstimatedDuration() {
+//        return estimatedDuration;
+//    }
+//
+//    public void setEstimatedDuration(Date estimatedDuration) {
+//        this.estimatedDuration = estimatedDuration;
+//    }
+    
+    public Date getEstimatedDuration() {
         return estimatedDuration;
     }
 
-    public void setEstimatedDuration(LocalTime estimatedDuration) {
+    public void setEstimatedDuration(Date estimatedDuration) {
         this.estimatedDuration = estimatedDuration;
     }
 
@@ -157,14 +178,13 @@ public class Route implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
+//    public Date getUpdatedAt() {
+//        return updatedAt;
+//    }
+//
+//    public void setUpdatedAt(Date updatedAt) {
+//        this.updatedAt = updatedAt;
+//    }
     @XmlTransient
     public Set<Trip> getTripSet() {
         return tripSet;
@@ -172,6 +192,17 @@ public class Route implements Serializable {
 
     public void setTripSet(Set<Trip> tripSet) {
         this.tripSet = tripSet;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = new Date();
     }
 
     @Override
@@ -198,5 +229,6 @@ public class Route implements Serializable {
     public String toString() {
         return "com.ntq.pojo.Route[ routeID=" + routeID + " ]";
     }
-    
+
+
 }

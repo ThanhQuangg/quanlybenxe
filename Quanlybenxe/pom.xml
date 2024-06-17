@@ -132,8 +132,27 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.12.2</version>
         </dependency>
-    </dependencies>
+        <dependency>
+            <groupId>com.nimbusds</groupId>
+            <artifactId>nimbus-jose-jwt</artifactId>
+            <version>9.31</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.32</version> <!-- Hoặc phiên bản mới nhất -->
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.6</version> <!-- Hoặc phiên bản mới nhất -->
+        </dependency>
+       
+          
 
+    </dependencies>
+    
+   
     <build>
         <plugins>
             <plugin>

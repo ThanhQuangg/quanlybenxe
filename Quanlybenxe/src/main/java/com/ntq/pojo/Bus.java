@@ -1,9 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.ntq.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -20,6 +17,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -30,10 +29,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.springframework.web.multipart.MultipartFile;
 
-/**
- *
- * @author ACER
- */
 @Entity
 @Table(name = "bus")
 @XmlRootElement
@@ -47,6 +42,11 @@ import org.springframework.web.multipart.MultipartFile;
     @NamedQuery(name = "Bus.findByUpdatedAt", query = "SELECT b FROM Bus b WHERE b.updatedAt = :updatedAt")})
 public class Bus implements Serializable {
 
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "Capacity")
+    private int capacity;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,16 +54,14 @@ public class Bus implements Serializable {
     @Column(name = "BusID")
     private Integer busID;
     @Size(max = 20)
+    @Column(name = "name")
+    private String name;
     @Column(name = "PlateNumber")
     private String plateNumber;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "Capacity")
-    private int capacity;
     @Size(max = 255)
     @Column(name = "avatar")
     private String avatar;
-    @Column(name = "created_at")
+    @Column(name = "created_at", updatable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
     @Column(name = "updated_at")
@@ -76,15 +74,20 @@ public class Bus implements Serializable {
     @ManyToOne
     private Company companyID;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "busId")
+    @JsonIgnore
     private Set<Booking> bookingSet;
     @OneToMany(mappedBy = "busID")
+    @JsonIgnore
     private Set<Trip> tripSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "busID")
+    @JsonIgnore
     private Set<Comment> commentSet;
     @Transient
     private MultipartFile file;
 
     public Bus() {
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
     }
 
     public Bus(Integer busID) {
@@ -112,13 +115,6 @@ public class Bus implements Serializable {
         this.plateNumber = plateNumber;
     }
 
-    public int getCapacity() {
-        return capacity;
-    }
-
-    public void setCapacity(int capacity) {
-        this.capacity = capacity;
-    }
 
     public String getAvatar() {
         return avatar;
@@ -182,6 +178,16 @@ public class Bus implements Serializable {
     public void setCommentSet(Set<Comment> commentSet) {
         this.commentSet = commentSet;
     }
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = new Date();
+    }
 
     @Override
     public int hashCode() {
@@ -222,12 +228,34 @@ public class Bus implements Serializable {
         this.file = file;
     }
 
-    public void setCreatedAt(LocalDateTime currentTime) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    public void setCreatedAt(LocalDateTime currentTime) {
+//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    }
+//
+//    public void setUpdatedAt(LocalDateTime currentTime) {
+//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+//    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
     }
 
-    public void setUpdatedAt(LocalDateTime currentTime) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public void setCapacity(int capacity) {
+        this.capacity = capacity;
     }
 
 }

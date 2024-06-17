@@ -5,6 +5,8 @@ import com.ntq.repositories.BusRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -68,11 +70,12 @@ public class BusRepositoryImpl implements BusRepository {
     @Override
     public void addOrUpdate(Bus b) {
         Session s = this.factoryBean.getObject().getCurrentSession();
-        if (b.getBusID() != null)
+        if (b.getBusID() != null) {
             s.update(b);
-        else
+        } else {
             s.save(b);
-//            s.saveOrUpdate(b);
+        }
+
     }
 
     @Override
@@ -87,5 +90,13 @@ public class BusRepositoryImpl implements BusRepository {
         Bus b = this.getBusById(busID);
         s.delete(b);
     }
-
+    
+    @PersistenceContext
+    private EntityManager entityManager;
+    @Override
+    public List<Bus> findByCompanyId(int companyID) {
+        return entityManager.createQuery("SELECT b FROM Bus b WHERE b.companyID = :companyID", Bus.class)
+                .setParameter("companyID", companyID)
+                .getResultList();
+    }
 }

@@ -13,6 +13,9 @@
 <div>
     <a class="btn btn-info" href="<c:url value="/categories"/>"> Thêm loại xe </a>
 </div>
+<div>
+    <a class="btn btn-info" href="<c:url value="/trips"/>"> Thêm tuyến xe </a>
+</div>
 
 
 <table class="table table-striped mt-1">
@@ -35,10 +38,8 @@
                 <c:url value="/api/buses/${b.busID}" var="url" />
                 <a class="btn btn-info"href="<c:url value="/buses/${b.busID}"/>" >Cập nhật</a>
                 <button onclick="deleteBus('${url}',${b.busID})" class="btn btn-danger">Xóa</button>
-                
-               
-                
             </td>
+            
         </tr>
     </c:forEach>
 </table>

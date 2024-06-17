@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface RouteService {
 
-    List<Route> getRoutes();
+//    List<Route> getRoutes();
 
     List<Route> getRoutes(Map<String, String> params);
 

@@ -10,6 +10,8 @@ import com.ntq.services.CategoryService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 
 /**
  *
@@ -21,7 +23,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryRepository cateRepo;
 
-    @Override
+    @Transactional
     public List<Category> getCates() {
         return this.cateRepo.getCates();
     }

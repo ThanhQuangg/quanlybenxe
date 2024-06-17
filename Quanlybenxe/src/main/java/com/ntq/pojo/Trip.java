@@ -1,14 +1,12 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.ntq.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,6 +17,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -45,10 +45,13 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Trip.findByUpdatedAt", query = "SELECT t FROM Trip t WHERE t.updatedAt = :updatedAt")})
 public class Trip implements Serializable {
 
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
+    @Column(name = "name")
+    private String name;
     @Column(name = "TripID")
     private Integer tripID;
     @Basic(optional = false)
@@ -78,6 +81,7 @@ public class Trip implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
     @OneToMany(mappedBy = "tripID")
+    @JsonIgnore
     private Set<Booking> bookingSet;
     @JoinColumn(name = "BusID", referencedColumnName = "BusID")
     @ManyToOne
@@ -85,7 +89,11 @@ public class Trip implements Serializable {
     @JoinColumn(name = "RouteID", referencedColumnName = "RouteID")
     @ManyToOne
     private Route routeID;
+    @JoinColumn(name = "CompanyID", referencedColumnName = "CompanyID")
+    @ManyToOne
+    private Company companyID;
 
+    
     public Trip() {
     }
 
@@ -181,7 +189,27 @@ public class Trip implements Serializable {
     public void setRouteID(Route routeID) {
         this.routeID = routeID;
     }
+    
+    public Company getCompanyID() {
+        return companyID;
+    }
 
+    
+    public void setCompanyID(Company companyID) {
+        this.companyID = companyID;
+    }
+
+    @PrePersist
+    protected void onCreate() {
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = new Date();
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -206,5 +234,24 @@ public class Trip implements Serializable {
     public String toString() {
         return "com.ntq.pojo.Trip[ tripID=" + tripID + " ]";
     }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
+
     
+
+    
+    
+
 }

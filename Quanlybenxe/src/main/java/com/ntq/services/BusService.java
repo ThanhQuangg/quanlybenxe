@@ -13,5 +13,7 @@ public interface BusService {
     Bus getBusesById(int busID);
 
     void deleteBus(int busID);
+    
+    List<Bus> getBusesByCompany(int companyID);
 
 }

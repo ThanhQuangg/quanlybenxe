@@ -29,4 +29,8 @@
         <put-attribute name="title" value="Trang quản loại xe " />
         <put-attribute name="content" value="/WEB-INF/pages/category.jsp" />
     </definition>
+    <definition name="trips" extends="baseLayout">
+        <put-attribute name="title" value="Trang quản tuyến xe " />
+        <put-attribute name="content" value="/WEB-INF/pages/trip.jsp" />
+    </definition>
 </tiles-definitions>
