@@ -14,6 +14,6 @@ public interface BusRepository {
 
     void deleteBus(int busID);
 
-    List<Bus> findByCompanyId(int companyID);
+    List<Bus> findAllBusesByCompanyId(int companyId);
 
 }

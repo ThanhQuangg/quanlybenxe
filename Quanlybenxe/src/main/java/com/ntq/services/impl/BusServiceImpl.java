@@ -54,8 +54,8 @@ public class BusServiceImpl implements BusService {
     }
 
     @Override
-    public List<Bus> getBusesByCompany(int companyID) {
-        return busRepository.findByCompanyId(companyID);
+    public List<Bus> getBusesByCompanyId(int companyId) {
+        return busRepository.findAllBusesByCompanyId(companyId);
     }
 
 }

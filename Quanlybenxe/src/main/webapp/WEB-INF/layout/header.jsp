@@ -1,9 +1,3 @@
-<%-- 
-    Document   : header
-    Created on : May 24, 2024, 11:49:46 AM
-    Author     : ACER
---%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!-- Navbar -->
@@ -18,6 +12,7 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#">Trang Chủ</a>
                 </li>
+
                 <c:forEach items="${categories}" var="c">
                     <li class="nav-item">
                         <a class="nav-link" href="#">${c.name}</a>
@@ -41,5 +36,27 @@
 
             </ul>
         </div>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <style>
+            .sidebar {
+                position: fixed;
+                left: -250px; /* Bắt đầu với sidebar đóng */
+                width: 250px;
+                height: 100%;
+                background-color: #f8f9fa;
+                padding-top: 20px;
+                transition: left 0.3s ease;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 20px;
+                transition: margin-left 0.3s ease;
+            }
+
+            .sidebar.active {
+                left: 0; /* Khi active, sidebar mở ra */
+            }
+        </style>
     </div>
 </nav>

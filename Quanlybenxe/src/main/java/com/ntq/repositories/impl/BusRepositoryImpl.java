@@ -19,6 +19,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import javax.persistence.TypedQuery;
 
 @Repository
 @Transactional
@@ -94,9 +95,9 @@ public class BusRepositoryImpl implements BusRepository {
     @PersistenceContext
     private EntityManager entityManager;
     @Override
-    public List<Bus> findByCompanyId(int companyID) {
-        return entityManager.createQuery("SELECT b FROM Bus b WHERE b.companyID = :companyID", Bus.class)
-                .setParameter("companyID", companyID)
-                .getResultList();
+    public List<Bus> findAllBusesByCompanyId(int companyId) {
+        TypedQuery<Bus> query = entityManager.createNamedQuery("Bus.findByCompanyId", Bus.class);
+        query.setParameter("companyId", companyId);
+        return query.getResultList();
     }
 }

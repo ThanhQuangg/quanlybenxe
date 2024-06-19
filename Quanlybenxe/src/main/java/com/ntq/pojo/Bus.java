@@ -2,7 +2,6 @@ package com.ntq.pojo;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 import javax.persistence.Basic;
@@ -35,6 +34,7 @@ import org.springframework.web.multipart.MultipartFile;
 @NamedQueries({
     @NamedQuery(name = "Bus.findAll", query = "SELECT b FROM Bus b"),
     @NamedQuery(name = "Bus.findByBusID", query = "SELECT b FROM Bus b WHERE b.busID = :busID"),
+    @NamedQuery(name = "Bus.findByCompanyId", query = "SELECT b FROM Bus b WHERE b.companyID.companyID = :companyId"),
     @NamedQuery(name = "Bus.findByPlateNumber", query = "SELECT b FROM Bus b WHERE b.plateNumber = :plateNumber"),
     @NamedQuery(name = "Bus.findByCapacity", query = "SELECT b FROM Bus b WHERE b.capacity = :capacity"),
     @NamedQuery(name = "Bus.findByAvatar", query = "SELECT b FROM Bus b WHERE b.avatar = :avatar"),
@@ -115,7 +115,6 @@ public class Bus implements Serializable {
         this.plateNumber = plateNumber;
     }
 
-
     public String getAvatar() {
         return avatar;
     }
@@ -124,13 +123,9 @@ public class Bus implements Serializable {
         this.avatar = avatar;
     }
 
-    
-
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
-
-    
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
@@ -178,6 +173,7 @@ public class Bus implements Serializable {
     public void setCommentSet(Set<Comment> commentSet) {
         this.commentSet = commentSet;
     }
+
     @PrePersist
     protected void onCreate() {
         this.createdAt = new Date();
@@ -235,7 +231,6 @@ public class Bus implements Serializable {
 //    public void setUpdatedAt(LocalDateTime currentTime) {
 //        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
 //    }
-
     /**
      * @return the name
      */

@@ -50,10 +50,10 @@ public class Trip implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "name")
-    private String name;
     @Column(name = "TripID")
     private Integer tripID;
+    @Column(name = "name")
+    private String name;
     @Basic(optional = false)
     @NotNull
     @Column(name = "DepartureTime")
@@ -64,7 +64,6 @@ public class Trip implements Serializable {
     @Column(name = "ArrivalTime")
     @Temporal(TemporalType.TIMESTAMP)
     private Date arrivalTime;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @NotNull
     @Column(name = "TicketPrice")

@@ -1,9 +1,8 @@
-    package com.ntq.repositories.impl;
+package com.ntq.repositories.impl;
 
 import com.ntq.pojo.Cart;
 import com.ntq.pojo.OrderDetails;
 import com.ntq.pojo.Orders;
-import com.ntq.pojo.Trip;
 import com.ntq.pojo.User;
 import com.ntq.repositories.ReceiptRepository;
 import com.ntq.repositories.TripRepository;
@@ -42,23 +41,24 @@ public class ReceiptRepositoryImpl implements ReceiptRepository {
             User u = this.userRepo.getUserByUsername(authentication.getName());
             order.setUserId(u);
             order.setOrderDate(new Date());
-            s.save(u);
-   
+            s.save(order);
 
             for (Cart c : carts.values()) {
+//                System.out.println("Trip ID: " + c.getId()); // Log để kiểm tra giá trị của tripId
+//                Trip trip = this.tripRepo.getTripById(c.getId());
+//
+//                if (trip == null) {
+//                    throw new HibernateException("Trip not found for ID: " + c.getId());
+//                }
+                
                 OrderDetails d = new OrderDetails();
-                Trip trip = this.tripRepo.getTripById(c.getId());
-                if (trip != null) {
-                    d.setTripId(trip);
-//                    d.setTripId(this.tripRepo.getTripById(c.getId()));
-                    d.setOrderId(order);
-                    d.setQuantity(c.getQuantity());
-                    d.setPrice(c.getPrice());
+                d.setTripId(this.tripRepo.getTripById(c.getId()));
+                d.setOrderId(order);
+                d.setQuantity(c.getQuantity());
+                d.setPrice(c.getPrice());
 
-                    s.save(d);
-                }
+                s.save(d);
             }
-//            s.save(order);
             return true;
         } catch (HibernateException ex) {
             ex.printStackTrace();

@@ -23,8 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
     "com.ntq.controllers",
     "com.ntq.repositories",
     "com.ntq.services",
-    "com.ntq.components",
-    "com.ntq.filters"
+    "com.ntq.components"
 })
 @Order(1)
 public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -63,11 +62,12 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().ignoringAntMatchers("/api/**");
         http.authorizeRequests().antMatchers("/api/login/").permitAll();
-        http.authorizeRequests().antMatchers("/api/products/").permitAll();
-        http.authorizeRequests().antMatchers("/api/products/**").permitAll();
-        http.authorizeRequests().antMatchers("/api/categories/").permitAll();
-        http.authorizeRequests().antMatchers("/api/users/").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/**/comments/").permitAll();
+        http.authorizeRequests().antMatchers("/api/buses").permitAll();
+        http.authorizeRequests().antMatchers("/api/buses/**").permitAll();
+        http.authorizeRequests().antMatchers("/api/trips/").permitAll();
+        http.authorizeRequests().antMatchers("/api/trips/**").permitAll();
+//        http.authorizeRequests().antMatchers("/api/users/").permitAll();
+//        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/**/comments/").permitAll();
         http.antMatcher("/api/**").httpBasic().authenticationEntryPoint(restServicesEntryPoint()).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/**").access("hasRole('ROLE_ADMIN') or hasRole('ROLE_USER')")

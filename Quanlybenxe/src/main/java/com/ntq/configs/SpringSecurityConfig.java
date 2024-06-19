@@ -23,9 +23,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan(basePackages = {
     "com.ntq.controllers",
     "com.ntq.repositories",
-    "com.ntq.services",
-    "com.ntq.components",
-    "com.ntq.filters"
+    "com.ntq.services"
 })
 @Order(2)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -66,9 +64,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureUrl("/login?error");
         http.logout().logoutSuccessUrl("/login");
 
-        http.exceptionHandling()
-                .accessDeniedPage("/login?accessDenied");
-//        http.authorizeRequests().antMatchers("/").permitAll()
+        http.exceptionHandling().accessDeniedPage("/login?accessDenied");
+        http.authorizeRequests().antMatchers("/").access("hasRole('ROLE_ADMIN')");     
+//        http.authorizeRequests().antMatchers("/").permitAll();
 //                .antMatchers("/**/add")
 //                .access("hasRole('ROLE_ADMIN')");
 //        .antMatchers("/**/pay")

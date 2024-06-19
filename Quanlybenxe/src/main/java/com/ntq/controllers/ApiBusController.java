@@ -57,9 +57,9 @@ public class ApiBusController {
         return new ResponseEntity<>(this.busService.getBusesById(busID), HttpStatus.OK);
     }
 
-    @GetMapping("/companies/{companyID}/buses")
-    public ResponseEntity<List<Bus>> getBusesByCompany(@PathVariable("companyID") int companyID) {
-        List<Bus> buses = busService.getBusesByCompany(companyID);
+    @GetMapping("/companies/{companyId}/buses")
+    public ResponseEntity<List<Bus>> getBusesByCompany(@PathVariable("companyId") int companyId) {
+        List<Bus> buses = busService.getBusesByCompanyId(companyId);
         return new ResponseEntity<>(buses, HttpStatus.OK);
     }
 

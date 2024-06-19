@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import java.util.Collections;
 
 @Controller
 public class BusesController {
@@ -22,7 +23,7 @@ public class BusesController {
 
     @GetMapping("/buses")
     public String createView(Model model) {
-
+        List<Bus> buses = busService.getBuses(Collections.emptyMap());
         model.addAttribute("bus", new Bus());
         return "buses";
     }

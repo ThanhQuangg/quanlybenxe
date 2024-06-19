@@ -36,8 +36,7 @@ public class JwtService {
             signedJWT.sign(signer);
             token = signedJWT.serialize();
         } catch (JOSEException e) {
-            throw new RuntimeException("Error generating token", e);
-//            System.out.println(e.getMessage());
+            System.out.println(e.getMessage());
         }
         return token;
     }

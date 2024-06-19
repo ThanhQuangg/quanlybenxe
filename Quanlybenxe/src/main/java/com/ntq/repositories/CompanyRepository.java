@@ -13,4 +13,6 @@ public interface CompanyRepository {
     Company getCompaniesByID(int companyID);
 
     void deleteCompany(int companyID);
+    
+//    List<Company> findByIsActiveFalse();
 }

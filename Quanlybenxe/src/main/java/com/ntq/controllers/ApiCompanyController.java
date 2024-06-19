@@ -58,10 +58,13 @@ public class ApiCompanyController {
         company.setAvatar(params.get("avatar"));
         company.setIsShippingAvailable(Boolean.parseBoolean(params.get("isShippingAvailable")));
         company.setCreatedAt(new Date());
-        
+        company.setIsActive(false);
         if (file != null && file.length > 0) {
             company.setFile(file[0]);
         }
         this.companyService.addOrUpdate(company);
+
+        // Gửi yêu cầu xác thực lên admin
+//        this.companyService.sendVerificationRequest(company);
     }
 }

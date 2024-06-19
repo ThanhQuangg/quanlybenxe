@@ -13,4 +13,8 @@ public interface CompanyService {
     Company getCompaniesById(int companyID);
 
     void deleteCompany(int companyID);
+
+//    void sendVerificationRequest(Company company);
+
+//    void verifyCompany(Company company);
 }

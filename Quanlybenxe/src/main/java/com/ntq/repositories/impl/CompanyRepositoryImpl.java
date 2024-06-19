@@ -5,6 +5,7 @@ import com.ntq.repositories.CompanyRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -22,6 +23,8 @@ public class CompanyRepositoryImpl implements CompanyRepository {
 
     @Autowired
     private LocalSessionFactoryBean factoryBean;
+//    @Autowired
+//    private EntityManager entityManager;
 
     @Override
     public List<Company> getCompanieses(Map<String, String> params) {
@@ -43,11 +46,7 @@ public class CompanyRepositoryImpl implements CompanyRepository {
     @Override
     public void addOrUpdate(Company c) {
         Session s = this.factoryBean.getObject().getCurrentSession();
-//        if (c.getCompanyID() > 0) {
-//            s.update(c);
-//        } else {
-//            s.save(c);
-//        }
+
         s.saveOrUpdate(c);
     }
 
@@ -63,5 +62,11 @@ public class CompanyRepositoryImpl implements CompanyRepository {
         Company c = this.getCompaniesByID(companyID);
         s.delete(c);
     }
-
+    
+//    @Override
+//    public List<Company> findByIsActiveFalse() {
+//        String jpql = "SELECT c FROM Company c WHERE c.isActive = false";
+//        Query query = entityManager.createQuery(jpql, Company.class);
+//        return query.getResultList();
+//    }
 }

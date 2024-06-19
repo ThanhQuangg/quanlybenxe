@@ -7,7 +7,6 @@ import com.ntq.services.UserService;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.logging.Logger;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -29,38 +28,34 @@ public class JwtAuthenticationTokenFilter extends UsernamePasswordAuthentication
     private JwtService jwtService;
     @Autowired
     private UserService userService;
-    private static final Logger logger = Logger.getLogger(JwtAuthenticationTokenFilter.class.getName());
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String authToken = httpRequest.getHeader(TOKEN_HEADER);
-        try {
-            if (authToken != null && jwtService.validateTokenLogin(authToken)) {
-                String username = jwtService.getUsernameFromToken(authToken);
-                User user = userService.getUserByUsername(username);
 
-                if (user != null) {
-                    boolean enabled = true;
-                    boolean accountNonExpired = true;
-                    boolean credentialsNonExpired = true;
-                    boolean accountNonLocked = true;
+        if (jwtService.validateTokenLogin(authToken)) {
+            String username = jwtService.getUsernameFromToken(authToken);
+            User user = userService.getUserByUsername(username);
 
-                    Set<GrantedAuthority> authorities = new HashSet<>();
-                    authorities.add(new SimpleGrantedAuthority(user.getUserRole()));
+            if (user != null) {
+                boolean enabled = true;
+                boolean accountNonExpired = true;
+                boolean credentialsNonExpired = true;
+                boolean accountNonLocked = true;
 
-                    UserDetails userDetail = new org.springframework.security.core.userdetails.User(username, user.getPassword(), enabled, accountNonExpired,
-                            credentialsNonExpired, accountNonLocked, authorities);
+                Set<GrantedAuthority> authorities = new HashSet<>();
+                authorities.add(new SimpleGrantedAuthority(user.getUserRole()));
 
-                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetail,
-                            null, userDetail.getAuthorities());
-                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
+                UserDetails userDetail = new org.springframework.security.core.userdetails.User(username, user.getPassword(), enabled, accountNonExpired,
+                        credentialsNonExpired, accountNonLocked, authorities);
+
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetail,
+                        null, userDetail.getAuthorities());
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(httpRequest));
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-        } catch (Exception e) {
-            logger.severe("Failed to authenticate user: " + e.getMessage());
         }
         chain.doFilter(request, response);
     }
