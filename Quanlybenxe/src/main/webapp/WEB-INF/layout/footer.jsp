@@ -1,9 +1,3 @@
-<%-- 
-    Document   : footer
-    Created on : May 24, 2024, 11:49:55 AM
-    Author     : ACER
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!-- Footer -->
 <footer class="bg-light text-center text-lg-start mt-5">

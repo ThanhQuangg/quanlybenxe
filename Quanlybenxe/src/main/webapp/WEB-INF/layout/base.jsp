@@ -1,9 +1,3 @@
-<%-- 
-    Document   : base
-    Created on : May 24, 2024, 11:45:59 AM
-    Author     : ACER
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 <!DOCTYPE html>
@@ -18,9 +12,16 @@
     </head>
     <body>
         <tiles:insertAttribute name="header" />
-        <section class="container">
-            <tiles:insertAttribute name="content" />
-        </section>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3">
+                    <tiles:insertAttribute name="sidebar" />
+                </div>
+                <div class="col-md-9">
+                    <tiles:insertAttribute name="content" />
+                </div>
+            </div>
+        </div>
         <tiles:insertAttribute name="footer" />
     </body>
 </html>
